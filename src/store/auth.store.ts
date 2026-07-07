@@ -1,9 +1,10 @@
-import create from 'zustand';
+import { create } from 'zustand';
 
 type User = {
   id?: string;
   email?: string;
   name?: string;
+  role?: string;
 };
 
 type AuthState = {
@@ -13,7 +14,7 @@ type AuthState = {
   logout: () => void;
 };
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set: any) => ({
   token: typeof window !== 'undefined' ? localStorage.getItem('token') : null,
   user: typeof window !== 'undefined' && localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')!) : null,
   login: (token: string, user?: User) => {
