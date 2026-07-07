@@ -45,6 +45,25 @@ export default defineConfig([
 ```
 
 You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## How to run locally (Docker)
+
+This repository includes an `infra` docker-compose configuration to run required infrastructure and the services locally.
+
+From the `hgm-frontend` folder:
+
+```bash
+cd infra
+docker compose up -d
+
+# verify containers
+docker ps
+
+# view logs for postgres
+docker compose logs -f postgres
+```
+
+Environment variables for the compose stack are in `infra/.env.docker`.
+
 
 ```js
 // eslint.config.js

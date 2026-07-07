@@ -1,0 +1,110 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:16
+    env_file: .env.docker
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mongodb:
+    image: mongo:7
+    env_file: .env.docker
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo_data:/data/db
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.10.2
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=${ES_JAVA_OPTS}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    ports:
+      - '9200:9200'
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    env_file: .env.docker
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  redis:
+    image: redis:7
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+
+  minio:
+    image: minio/minio
+    env_file: .env.docker
+    command: server /data --console-address ":9001"
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - minio_data:/data
+
+  system-a:
+    build:
+      context: ../../hgm-system-a
+    ports:
+      - '3001:3001'
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+    environment:
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+
+  system-b:
+    build:
+      context: ../../hgm-system-b
+    ports:
+      - '3002:3002'
+    depends_on:
+      - mongodb
+      - elasticsearch
+      - rabbitmq
+      - redis
+    environment:
+      - MONGO_URL=mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@mongodb:27017
+
+  frontend:
+    build:
+      context: ..
+    ports:
+      - '5173:5173'
+    depends_on:
+      - system-a
+      - system-b
+
+volumes:
+  postgres_data:
+  mongo_data:
+  es_data:
+  rabbitmq_data:
+  redis_data:
+  minio_data:
