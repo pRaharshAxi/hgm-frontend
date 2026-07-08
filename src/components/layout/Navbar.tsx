@@ -14,26 +14,41 @@ export default function Navbar() {
 
   return (
     <nav className="navbar">
-      <div className="navbar-brand">Comidela</div>
+      <div className="navbar-brand">
+        <span className="navbar-logo-icon">🌿</span>
+        <span>GardenLink</span>
+      </div>
       <div className="navbar-links">
         <Link to="/">Home</Link>
-        <Link to="/search">Search</Link>
-        {token ? <Link to="/dashboard">My Dashboard</Link> : null}
-        {!token ? <Link to="/login">Login</Link> : null}
-        {!token ? <Link to="/register">Register</Link> : null}
+        <a href="#about">About Us</a>
+        <a href="#services">Services</a>
+        <a href="#pages">Pages</a>
+        <a href="#contact">Contact Us</a>
       </div>
-      {token ? (
-        <div className="navbar-user">
-          <span className="navbar-avatar">{user?.name?.[0]?.toUpperCase() ?? 'U'}</span>
-          <button className="navbar-button" type="button" onClick={handleLogout}>
-            Logout
-          </button>
-        </div>
-      ) : (
-        <Link className="navbar-button" to="/register">
-          Get Started
+      <div className="navbar-actions">
+        {token ? (
+          <>
+            <Link className="navbar-link" to="/dashboard">
+              Dashboard
+            </Link>
+            <button className="navbar-button secondary" type="button" onClick={handleLogout}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <>
+            <Link className="navbar-link" to="/login">
+              Login
+            </Link>
+            <Link className="navbar-button primary" to="/register">
+              Get Started
+            </Link>
+          </>
+        )}
+        <Link className="navbar-button store" to="/shop">
+          Online Store
         </Link>
-      )}
+      </div>
     </nav>
   );
 }

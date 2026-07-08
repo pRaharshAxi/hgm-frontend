@@ -10,13 +10,12 @@ import DashboardPage from '../pages/dashboard/DashboardPage';
 function Home() {
   return (
     <div className="hero-screen">
-      <Navbar />
       <main className="hero-content">
         <div className="hero-copy">
-          <span className="hero-eyebrow">DOMINICAN FLAVOR, MADE DIGITAL</span>
+          <span className="hero-eyebrow">GARDEN FRESH, DELIVERED DIGITALLY</span>
           <h1>Fresh selections, ready when you are</h1>
           <p className="hero-text">
-            Order online. Pick up fresh local products—plátano, yuca, sazón—without the hassle.
+            Discover farm-fresh produce and local favorites delivered with care.
           </p>
           <div className="hero-actions">
             <Link className="btn btn-primary" to="/shop">
