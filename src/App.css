@@ -151,6 +151,30 @@
   color: #10230d;
 }
 
+.navbar-cart {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #fff;
+  text-decoration: none;
+  font-size: 1rem;
+  position: relative;
+}
+
+.navbar-cart-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.3rem;
+  height: 1.3rem;
+  padding: 0 0.3rem;
+  border-radius: 999px;
+  background: #7cb342;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
 @media (max-width: 900px) {
   .navbar {
     padding: 18px 24px;

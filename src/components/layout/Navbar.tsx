@@ -3,7 +3,6 @@ import { useAuthStore } from '../../store/auth.store';
 
 export default function Navbar() {
   const token = useAuthStore((state) => state.token);
-  const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
 
@@ -41,12 +40,16 @@ export default function Navbar() {
               Login
             </Link>
             <Link className="navbar-button primary" to="/register">
-              Get Started
+              Register
             </Link>
           </>
         )}
         <Link className="navbar-button store" to="/shop">
           Online Store
+        </Link>
+        <Link className="navbar-cart" to="/cart" aria-label="View cart">
+          🛒
+          <span className="navbar-cart-badge">0</span>
         </Link>
       </div>
     </nav>
