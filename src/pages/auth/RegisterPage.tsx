@@ -139,7 +139,11 @@ export default function RegisterPage() {
         {apiError && <div className="api-error">{apiError}</div>}
 
         <button type="submit" disabled={submitting}>
-          {submitting ? 'Creating account…' : 'Register'}
+          {submitting ? (
+            <span className="button-spinner" aria-label="Loading" />
+          ) : (
+            'Register'
+          )}
         </button>
       </form>
     </div>

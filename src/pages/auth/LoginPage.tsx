@@ -79,7 +79,11 @@ export default function LoginPage() {
             Forgot password?
           </Link>
           <button type="submit" disabled={submitting}>
-            {submitting ? 'Signing in…' : 'Login'}
+            {submitting ? (
+              <span className="button-spinner" aria-label="Loading" />
+            ) : (
+              'Login'
+            )}
           </button>
         </div>
 

@@ -151,6 +151,29 @@
   color: #10230d;
 }
 
+.navbar-user-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 0.95rem;
+}
+
+.navbar-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 999px;
+  background: #7cb342;
+  color: #fff;
+  font-weight: 700;
+}
+
 .navbar-cart {
   display: inline-flex;
   align-items: center;
@@ -173,6 +196,95 @@
   color: #fff;
   font-size: 0.8rem;
   font-weight: 700;
+}
+
+.auth-page {
+  max-width: 480px;
+  margin: 120px auto 0;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.auth-page h1 {
+  margin-top: 0;
+  color: #2f3e2c;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-form label,
+.auth-fieldset {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  color: #2f3e2c;
+  font-weight: 600;
+}
+
+.auth-form input {
+  padding: 0.8rem 0.95rem;
+  border: 1px solid #cfd8c1;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.auth-form button {
+  padding: 0.9rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background: #7cb342;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-form button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.auth-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.auth-link {
+  color: #4b7c2f;
+  text-decoration: none;
+}
+
+.field-error {
+  color: #b42318;
+  font-size: 0.9rem;
+}
+
+.api-error {
+  color: #b42318;
+  font-weight: 600;
+}
+
+.button-spinner {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 900px) {
