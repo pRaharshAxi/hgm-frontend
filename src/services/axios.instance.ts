@@ -10,34 +10,30 @@ const api = axios.create({
   },
 });
 
-// Request interceptor: attach token
 api.interceptors.request.use((config) => {
   try {
     const token = useAuthStore.getState().token;
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-  } catch (err) {
+  } catch {
     // ignore
   }
   return config;
 });
 
-// Response interceptor: handle 401 -> redirect to login
 api.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    if (err?.response?.status === 401) {
-      // clear auth and redirect
+  (response) => response,
+  (error) => {
+    if (error?.response?.status === 401) {
       try {
         useAuthStore.getState().logout();
-      } catch (e) {
-        // fallback
+      } catch {
         window.location.href = '/login';
       }
     }
-    return Promise.reject(err);
-  }
+    return Promise.reject(error);
+  },
 );
 
 export default api;
