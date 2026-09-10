@@ -105,13 +105,13 @@ export default function CheckoutPage() {
               <span>
                 {item.title} × {item.quantity}
               </span>
-              <strong>₹{(item.price * item.quantity).toFixed(2)}</strong>
+              <strong>Rs.{Number(item.price * item.quantity).toFixed(2)}</strong>
             </div>
           ))}
           <hr />
           <div className="summary-row">
             <span>Subtotal</span>
-            <strong>₹{total.toFixed(2)}</strong>
+            <strong>Rs.{Number(total).toFixed(2)}</strong>
           </div>
           <div className="summary-row">
             <span>Delivery</span>

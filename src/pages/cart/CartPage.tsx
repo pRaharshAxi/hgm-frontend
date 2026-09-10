@@ -38,7 +38,7 @@ export default function CartPage() {
                   ×
                 </button>
               </div>
-              <div className="cart-item-price">₹{item.price.toFixed(2)} each</div>
+              <div className="cart-item-price">Rs.{Number(item.price).toFixed(2)} each</div>
               <div className="cart-qty-row">
                 <button type="button" className="qty-button" onClick={() => updateQuantity(item.id, item.quantity - 1)}>
                   −
@@ -48,7 +48,7 @@ export default function CartPage() {
                   +
                 </button>
               </div>
-              <div className="cart-item-subtotal">Subtotal: ₹{(item.price * item.quantity).toFixed(2)}</div>
+              <div className="cart-item-subtotal">Subtotal: Rs.{Number(item.price * item.quantity).toFixed(2)}</div>
             </div>
           </article>
         ))}
@@ -59,7 +59,7 @@ export default function CartPage() {
           <h2>Order summary</h2>
           <div className="summary-row">
             <span>Subtotal</span>
-            <strong>₹{subtotal.toFixed(2)}</strong>
+            <strong>Rs.{Number(subtotal).toFixed(2)}</strong>
           </div>
           <p className="muted-text">This is a local produce order.</p>
           <div className="summary-actions">

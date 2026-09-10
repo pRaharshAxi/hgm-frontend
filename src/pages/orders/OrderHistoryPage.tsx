@@ -42,7 +42,7 @@ export default function OrderHistoryPage() {
             </div>
             <div className="summary-row">
               <span>Total</span>
-              <strong>₹{order.totalAmount.toFixed(2)}</strong>
+              <strong>Rs.{Number(order.totalAmount).toFixed(2)}</strong>
             </div>
             <div className="summary-row">
               <span>{activeRole === 'buyer' ? 'Supplier' : 'Buyer'}</span>

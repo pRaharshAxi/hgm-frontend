@@ -85,19 +85,20 @@ export default function ListingDetailPage() {
         <section className="details-column">
           <span className="badge">{listing.category}</span>
           <h1 className="detail-title">{listing.title}</h1>
-          <div className="price-line">₹{listing.price.toFixed(2)} / unit</div>
+          <div className="price-line">Rs.{Number(listing.price).toFixed(2)} / unit</div>
           <p className={`availability ${listing.quantity < 5 ? 'warning' : ''}`}>
             {listing.quantity} units available {listing.quantity < 5 ? '(Low stock)' : ''}
           </p>
+
+          
 
           <div className="supplier-card">
             <div>
               <strong>{listing.supplierName}</strong>
               <div className="supplier-meta">
-                <StarRating value={listing.rating} />
-                <span>{listing.rating.toFixed(1)} ({listing.reviewsCount} reviews)</span>
+                <StarRating value={averageRating} />
+                <span>{averageRating.toFixed(1)} ({reviews.length} reviews)</span>
               </div>
-              <div>{listing.supplierAddress}</div>
             </div>
           </div>
 

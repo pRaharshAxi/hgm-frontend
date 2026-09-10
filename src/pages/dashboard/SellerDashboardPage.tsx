@@ -5,6 +5,7 @@ import { listingsApi, type Listing } from '../../services/listingsApi';
 import { ordersApi, type OrderRecord } from '../../services/ordersApi';
 import { reviewsApi } from '../../services/reviewsApi';
 
+
 const revenueData = [
   { month: 'Jan', revenue: 220 },
   { month: 'Feb', revenue: 340 },
@@ -56,7 +57,7 @@ export default function SellerDashboardPage() {
           <span>Pending Orders</span>
         </div>
         <div className="stat-card">
-          <strong>₹{totalRevenue.toFixed(2)}</strong>
+          <strong>Rs.{Number(totalRevenue).toFixed(2)}</strong>
           <span>Total Revenue</span>
         </div>
         <div className="stat-card">
@@ -83,7 +84,7 @@ export default function SellerDashboardPage() {
               <tr key={listing.id}>
                 <td>{listing.title}</td>
                 <td>{listing.category}</td>
-                <td>₹{listing.price.toFixed(2)}</td>
+                <td>Rs.{Number(listing.price).toFixed(2)}</td>
                 <td>{listing.quantity}</td>
                 <td><span className="badge-green">Active</span></td>
                 <td>
@@ -128,7 +129,7 @@ export default function SellerDashboardPage() {
                 <span>{order.status}</span>
               </div>
               <div className="muted-text">{new Date(order.createdAt).toLocaleDateString()}</div>
-              <strong>₹{order.totalAmount.toFixed(2)}</strong>
+              <strong>Rs.{Number(order.totalAmount).toFixed(2)}</strong>
               <Link className="btn btn-secondary" to={`/orders/${order.id}`}>
                 View Details
               </Link>

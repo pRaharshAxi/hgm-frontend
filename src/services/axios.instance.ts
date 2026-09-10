@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useAuthStore } from '../store/auth.store';
+import { useAuthStore } from './authStore';
 
 const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001';
 
@@ -36,4 +36,5 @@ api.interceptors.response.use(
   },
 );
 
+export { api };
 export default api;

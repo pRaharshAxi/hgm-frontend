@@ -89,7 +89,7 @@ export default function AdminListingsPage() {
                 <td>{listing.title}</td>
                 <td>{listing.supplier}</td>
                 <td>{listing.category}</td>
-                <td>₹{listing.price.toFixed(2)}</td>
+                <td>Rs.{Number(listing.price).toFixed(2)}</td>
                 <td>{listing.quantity}</td>
                 <td>
                   <span className={listing.status === 'Active' ? 'badge-green' : 'badge-muted'}>{listing.status}</span>

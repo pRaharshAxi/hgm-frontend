@@ -40,7 +40,7 @@ export default function OrderDetailPage() {
   });
 
   const statusIndex = useMemo(() => STATUS_STEPS.indexOf(order?.status ?? 'PLACED'), [order?.status]);
-  const canCancel = order?.status === 'CONFIRMED' && user?.role === 'buyer' && order.timeSincePlacedMinutes <= 60;
+  const canCancel = order?.status === 'CONFIRMED' && user?.role === 'BUYER' && order.timeSincePlacedMinutes <= 60;
 
   const handleAction = (nextStatus: OrderStatus) => {
     mutation.mutate({ nextStatus });
@@ -82,8 +82,8 @@ export default function OrderDetailPage() {
                 <tr key={item.id}>
                   <td>{item.title}</td>
                   <td>{item.quantity}</td>
-                  <td>₹{item.price.toFixed(2)}</td>
-                  <td>₹{(item.price * item.quantity).toFixed(2)}</td>
+                  <td>Rs.{Number(item.price).toFixed(2)}</td>
+                  <td>Rs.{Number(item.price * item.quantity).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
@@ -102,15 +102,15 @@ export default function OrderDetailPage() {
           </div>
           <div className="summary-row">
             <span>Total</span>
-            <strong>₹{order.totalAmount.toFixed(2)}</strong>
+            <strong>Rs.{Number(order.totalAmount).toFixed(2)}</strong>
           </div>
           <div className="action-buttons stacked">
-            {user?.role === 'supplier' && order.status === 'PLACED' ? (
+            {user?.role === 'SUPPLIER' && order.status === 'PLACED' ? (
               <button type="button" className="btn btn-primary" onClick={() => handleAction('CONFIRMED')}>
                 Confirm Order
               </button>
             ) : null}
-            {user?.role === 'supplier' && order.status === 'CONFIRMED' ? (
+            {user?.role === 'SUPPLIER' && order.status === 'CONFIRMED' ? (
               <button type="button" className="btn btn-primary" onClick={() => handleAction('FULFILLED')}>
                 Mark as Fulfilled
               </button>
@@ -120,7 +120,7 @@ export default function OrderDetailPage() {
                 Cancel Order
               </button>
             ) : null}
-            {user?.role === 'buyer' && order.status === 'FULFILLED' ? (
+            {user?.role === 'BUYER' && order.status === 'FULFILLED' ? (
               <button type="button" className="btn btn-primary" onClick={() => handleAction('COMPLETED')}>
                 Mark as Completed
               </button>
