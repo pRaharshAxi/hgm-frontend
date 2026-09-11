@@ -6,7 +6,7 @@ import OrderStatusBadge from '../../components/order/OrderStatusBadge';
 import ReviewForm from '../../components/reviews/ReviewForm';
 import { ordersApi, type OrderStatus } from '../../services/ordersApi';
 import { reviewsApi } from '../../services/reviewsApi';
-import { useAuthStore } from '../../store/auth.store';
+import { useAuthStore } from '../../services/authStore';
 
 const STATUS_STEPS: OrderStatus[] = ['PLACED', 'CONFIRMED', 'FULFILLED', 'COMPLETED'];
 
@@ -40,7 +40,7 @@ export default function OrderDetailPage() {
   });
 
   const statusIndex = useMemo(() => STATUS_STEPS.indexOf(order?.status ?? 'PLACED'), [order?.status]);
-  const canCancel = order?.status === 'CONFIRMED' && user?.role === 'BUYER' && order.timeSincePlacedMinutes <= 60;
+  const canCancel = order?.status === 'CONFIRMED' && user?.role === 'BUYER' && (order.timeSincePlacedMinutes ??0) <= 60;
 
   const handleAction = (nextStatus: OrderStatus) => {
     mutation.mutate({ nextStatus });
@@ -80,12 +80,14 @@ export default function OrderDetailPage() {
             <tbody>
               {order.items.map((item) => (
                 <tr key={item.id}>
-                  <td>{item.title}</td>
+                  <td>{item.listingTitle}</td>
                   <td>{item.quantity}</td>
-                  <td>Rs.{Number(item.price).toFixed(2)}</td>
-                  <td>Rs.{Number(item.price * item.quantity).toFixed(2)}</td>
-                </tr>
-              ))}
+                  <td>Rs.{Number(item.unitPrice).toFixed(2)}</td>
+                  <td>Rs.{Number(item.subtotal).toFixed(2)}</td>
+              </tr>
+                ))}
+
+              
             </tbody>
           </table>
         </section>
@@ -129,8 +131,8 @@ export default function OrderDetailPage() {
         </aside>
       </div>
 
-      {order.status === 'COMPLETED' && !review && !reviewSubmitted ? (
-        <ReviewForm orderId={order.id} onSubmitted={() => setReviewSubmitted(true)} />
+      {order.status === 'COMPLETED' && !review && !reviewSubmitted && user?.role === 'BUYER' ? (
+       <ReviewForm orderId={order.id} onSubmitted={() => setReviewSubmitted(true)} />
       ) : null}
     </div>
   );

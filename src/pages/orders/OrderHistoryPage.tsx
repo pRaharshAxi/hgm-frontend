@@ -3,13 +3,16 @@ import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import OrderStatusBadge from '../../components/order/OrderStatusBadge';
 import { ordersApi, type OrderRecord } from '../../services/ordersApi';
-import { useAuthStore } from '../../store/auth.store';
+import { useAuthStore } from '../../services/authStore';
 
 export default function OrderHistoryPage() {
   const user = useAuthStore((state) => state.user);
   const [activeRole, setActiveRole] = useState<'buyer' | 'supplier'>('buyer');
 
-  const roles = useMemo(() => (user?.role === 'supplier' ? ['buyer', 'supplier'] : ['buyer']), [user?.role]);
+  const roles = useMemo(
+    () => (user?.role === 'SUPPLIER' ? ['buyer', 'supplier'] : ['buyer']),
+    [user?.role],
+  );
 
   const { data: orders = [] } = useQuery({
     queryKey: ['orders', activeRole],
@@ -46,7 +49,7 @@ export default function OrderHistoryPage() {
             </div>
             <div className="summary-row">
               <span>{activeRole === 'buyer' ? 'Supplier' : 'Buyer'}</span>
-              <strong>{activeRole === 'buyer' ? order.supplierName : order.buyerName}</strong>
+              <strong>{activeRole === 'buyer' ? order.supplier?.name : order.buyer?.name}</strong>
             </div>
             <Link className="btn btn-secondary" to={`/orders/${order.id}`}>
               View Details

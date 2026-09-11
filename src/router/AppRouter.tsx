@@ -15,6 +15,7 @@ import AdminListingsPage from '../pages/admin/AdminListingsPage';
 import ProtectedRoute from './ProtectedRoute';
 import SellerDashboardPage from '../pages/dashboard/SellerDashboardPage';
 import CreateListingPage from '../pages/listing/CreateListingPage';
+import EditListingPage from '../pages/listing/EditListingPage';
 
 function Home() {
   return (
@@ -301,6 +302,15 @@ export default function AppRouter() {
           element={
             <ProtectedRoute allowedRoles={['SUPPLIER']}>
               <CreateListingPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+        path="/listing/edit/:id"
+        element={
+            <ProtectedRoute allowedRoles={['SUPPLIER']}>
+              <EditListingPage />
             </ProtectedRoute>
           }
         />

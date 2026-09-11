@@ -5,8 +5,8 @@ import toast from 'react-hot-toast';
 import { ReviewCard } from '../../components/reviews/ReviewCard';
 import { StarRating } from '../../components/reviews/StarRating';
 import { listingsApi } from '../../services/listingsApi';
-import { reviewsApi } from '../../services/reviewsApi';
-import { useAuthStore } from '../../store/auth.store';
+import { reviewsApi, type Review } from '../../services/reviewsApi';
+import { useAuthStore } from '../../services/authStore';
 import { useCartStore } from '../../store/cart.store';
 
 export default function ListingDetailPage() {
@@ -24,20 +24,19 @@ export default function ListingDetailPage() {
     enabled: Boolean(id),
   });
 
-  const { data: reviews = [] } = useQuery({
+  const { data: reviews = [] } = useQuery<Review[]>({
     queryKey: ['reviews', listing?.supplierId],
     queryFn: () => reviewsApi.getBySeller(listing?.supplierId ?? ''),
     enabled: Boolean(listing?.supplierId),
   });
-
+  
   const averageRating = useMemo(() => {
     if (!reviews.length) {
       return 0;
     }
-
-    const total = reviews.reduce((sum, review) => sum + review.rating, 0);
+    const total = reviews.reduce((sum: number, review: Review) => sum + review.rating, 0);
     return total / reviews.length;
-  }, [reviews]);
+  }, [reviews])
 
   const reviewPage = reviews.slice((page - 1) * 5, page * 5);
   const totalPages = Math.max(1, Math.ceil(reviews.length / 5));
@@ -154,10 +153,10 @@ export default function ListingDetailPage() {
         </div>
 
         <div className="review-list">
-          {reviewPage.map((review) => (
+          {reviewPage.map((review: Review) => (
             <ReviewCard
               key={review.id}
-              buyerName={review.buyerName}
+              buyerName={review.buyer?.name ?? 'Anonymous'}
               createdAt={review.createdAt}
               rating={review.rating}
               comment={review.comment}

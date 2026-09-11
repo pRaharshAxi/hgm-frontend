@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { ordersApi } from '../../services/ordersApi';
 import { paymentsApi } from '../../services/paymentsApi';
-import { useAuthStore } from '../../store/auth.store';
+import { useAuthStore } from '../../services/authStore';
 import { useCartStore } from '../../store/cart.store';
 
 export default function CheckoutPage() {
@@ -20,48 +20,70 @@ export default function CheckoutPage() {
 
   const total = useMemo(() => items.reduce((sum, item) => sum + item.price * item.quantity, 0), [items]);
 
+  
+
   const submitOrder = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+  
     if (!streetAddress.trim() || !city.trim() || !postalCode.trim()) {
       toast.error('Please complete all delivery fields before placing the order.');
       return;
     }
-
+  
     if (!items.length) {
       toast.error('Your cart is empty.');
       navigate('/search');
       return;
     }
-
+  
     if (!user?.email) {
       toast.error('Please login before checkout.');
       navigate('/login');
       return;
     }
-
+  
     setIsSubmitting(true);
-
+  
     try {
-      const order = await ordersApi.place({
-        items: items.map((item) => ({
-          listingId: item.id,
-          quantity: item.quantity,
-        })),
-        deliveryAddress: `${streetAddress}, ${city}, ${postalCode}`,
-        notes,
-      });
-
+      // Group cart items by supplier — backend requires one supplier per order
+      const groupedBySupplier = items.reduce<Record<string, typeof items>>((acc, item) => {
+        if (!acc[item.supplierId]) {
+          acc[item.supplierId] = [];
+        }
+        acc[item.supplierId].push(item);
+        return acc;
+      }, {});
+  
+      const supplierGroups = Object.values(groupedBySupplier);
+  
+      const createdOrders = [];
+      for (const group of supplierGroups) {
+        const order = await ordersApi.place({
+          items: group.map((item) => ({
+            listingId: item.id,
+            quantity: item.quantity,
+          })),
+          deliveryAddress: `${streetAddress}, ${city}, ${postalCode}`,
+          notes,
+        });
+        createdOrders.push(order);
+      }
+  
       setIsSubmitting(false);
       setIsRedirecting(true);
-
+  
+      if (createdOrders.length > 1) {
+        toast.success(`${createdOrders.length} separate orders placed (one per supplier).`);
+      }
+  
+      // Create a payment session per order; redirect to the first for now
       const session = await paymentsApi.createSession({
-        orderId: order.id,
-        amount: order.totalAmount,
+        orderId: createdOrders[0].id,
+        amount: createdOrders.reduce((sum, o) => sum + Number(o.totalAmount), 0),
         currency: 'LKR',
         buyerEmail: user.email,
       });
-
+  
       window.location.href = session.checkoutUrl;
     } catch (error: unknown) {
       setIsSubmitting(false);
@@ -70,6 +92,12 @@ export default function CheckoutPage() {
       toast.error(message);
     }
   };
+  
+  
+  
+  
+  
+ 
 
   return (
     <div className="page-shell">
