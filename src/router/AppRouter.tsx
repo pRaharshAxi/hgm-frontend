@@ -268,6 +268,30 @@ function Home() {
           </div>
         </div>
       </section>
+      <section className="about-section">
+        <div className="about-copy">
+          <span className="about-eyebrow">🌿 About Us Company</span>
+          <h2>
+            Organic Integrity Durable
+            <br />
+            Impact Frutin’s Story
+          </h2>
+          <p>
+            Some studies suggest that organic foods may have higher levels of
+            certain nutrients and antioxidants compared to conventionally
+            grown foods. However, this can vary depending on factors like soil
+            quality and growing conditions.
+          </p>
+          <ul className="about-benefits">
+            <li>100% Organic Products</li>
+            <li>No Synthetic Chemicals</li>
+            <li>Always Fresh &amp; Natural Foods</li>
+            <li>Best Prices</li>
+            <li>Environmental Benefits</li>
+          </ul>
+          <a className="about-button" href="/search">Discover More <span aria-hidden="true">»</span></a>
+        </div>
+      </section>
       <section className="story-section">
         <div className="story-image" aria-hidden="true" />
         <div className="story-copy">
@@ -291,6 +315,63 @@ function Home() {
           </div>
         </div>
       </section>
+      <footer className="home-footer">
+        <div className="footer-contact">
+          <span className="footer-eyebrow">• Have questions?</span>
+          <h2>
+            Let’s get in touch with
+            <br />
+            <span>GardenLink</span>
+          </h2>
+          <a href="#contact">Contact information</a>
+          <p>
+            Local market support, online ordering help, and supplier questions.
+            <br />
+            Monday to Saturday: 8:00 AM - 6:00 PM
+            <br />
+            +1 (809) 555-2323 / +1 (829) 000-4567
+            <br />
+            contacto@gardenlink.com
+          </p>
+        </div>
+        <form className="footer-form" onSubmit={(event) => event.preventDefault()}>
+          <h3>Complete the formulary</h3>
+          <div className="footer-form-row">
+            <label>
+              First Name*
+              <input type="text" placeholder="First name..." required />
+            </label>
+            <label>
+              Last Name
+              <input type="text" placeholder="Last name..." />
+            </label>
+          </div>
+          <label>
+            Email*
+            <input type="email" placeholder="example@domain.com" required />
+          </label>
+          <label>
+            Message
+            <textarea placeholder="Type your message..." rows={4} />
+          </label>
+          <button type="submit">Send Message</button>
+        </form>
+        <div className="footer-bottom">
+          <div>
+            <strong>🌿 GardenLink</strong>
+            <p>The everyday ingredients that<br />make extraordinary memories.</p>
+            <span className="footer-socials">f&nbsp;&nbsp;◎&nbsp;&nbsp;➤&nbsp;&nbsp;▶</span>
+          </div>
+          <nav>
+            <a href="#about">Quick Links</a>
+            <a href="#about">About Us</a>
+            <a href="/search">Products</a>
+            <a href="#contact">Contact</a>
+            <a href="/register">Become a supplier</a>
+          </nav>
+          <small>© 2025 GardenLink. All rights reserved.</small>
+        </div>
+      </footer>
     </main>
   );
 }
