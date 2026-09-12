@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import NotifBell from '../notifications/NotifBell';
 import { useAuthStore } from '../../services/authStore';
 import { useCartStore } from '../../store/cart.store';
@@ -8,6 +8,7 @@ export default function Navbar() {
   const user = useAuthStore((state) => state.user);
   const logout = useAuthStore((state) => state.logout);
   const navigate = useNavigate();
+  const location = useLocation();
   const cartCount = useCartStore((state) =>
     state.items.reduce((count, item) => count + item.quantity, 0)
   );
@@ -19,6 +20,7 @@ export default function Navbar() {
 
   return (
     <nav
+      className={location.pathname === '/' ? 'site-navbar home-navbar' : 'site-navbar'}
       style={{
         position: 'sticky',
         top: 0,

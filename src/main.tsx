@@ -7,6 +7,7 @@ import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
 import 'leaflet/dist/leaflet.css';
 import App from './App';
 import './index.css';
+import './App.css';
 
 L.Marker.prototype.options.icon = L.icon({
   iconUrl,

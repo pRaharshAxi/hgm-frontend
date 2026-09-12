@@ -17,7 +17,7 @@ import SellerDashboardPage from '../pages/dashboard/SellerDashboardPage';
 import CreateListingPage from '../pages/listing/CreateListingPage';
 import EditListingPage from '../pages/listing/EditListingPage';
 
-function Home() {
+function LegacyHome() {
   return (
     <div
       style={{
@@ -239,6 +239,59 @@ function Home() {
         </div>
       </section>
     </div>
+  );
+}
+
+void LegacyHome;
+
+function Home() {
+  return (
+    <main className="home-page">
+      <section className="hero-section">
+        <div className="hero-produce hero-produce-left" aria-hidden="true">🌿</div>
+        <div className="hero-produce hero-produce-right" aria-hidden="true">🌿</div>
+        <div className="hero-copy">
+          <span className="hero-eyebrow">• Garden fresh, delivered digitally</span>
+          <h1>
+            Fresh selections,
+            <br />
+            <span>ready when you are.</span>
+          </h1>
+          <p>
+            Order online. Pick up fresh local products—plátano, yuca, sazón
+            <br className="hero-break" />
+            —without the hassle.
+          </p>
+          <div className="hero-actions">
+            <a className="hero-button" href="/search">Shop Now <span aria-hidden="true">→</span></a>
+            <a className="hero-link" href="/search?nearby=true">How it works <span aria-hidden="true">→</span></a>
+          </div>
+        </div>
+      </section>
+      <section className="story-section">
+        <div className="story-image" aria-hidden="true" />
+        <div className="story-copy">
+          <span className="story-eyebrow">• Local flavor meets digital ease</span>
+          <h2>
+            Why choose <span>GardenLink?</span>
+          </h2>
+          <p>
+            We bring you the best of local markets—without the hustle. From
+            fresh ingredients to a smooth online experience, GardenLink gives
+            you time back and flavor forward.
+          </p>
+          <ul className="story-list">
+            <li><strong>Smart Selection:</strong> Choose online, skip the guesswork</li>
+            <li><strong>Less Waiting:</strong> Your order is prepped and ready</li>
+            <li><strong>Authentic Goods:</strong> Only the best, local and fresh</li>
+          </ul>
+          <div className="story-actions">
+            <a className="hero-button" href="/search">Start Now <span aria-hidden="true">→</span></a>
+            <a className="story-secondary-button" href="/search">Learn More <span aria-hidden="true">ⓘ</span></a>
+          </div>
+        </div>
+      </section>
+    </main>
   );
 }
 
