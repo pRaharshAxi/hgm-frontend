@@ -3,12 +3,10 @@ import { Link } from 'react-router-dom';
 import { BarChart, Bar, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { listingsApi, type Listing } from '../../services/listingsApi';
 import { ordersApi, type OrderRecord } from '../../services/ordersApi';
-import { useAuthStore } from '../../services/authStore';
 import toast from 'react-hot-toast';
 
 export default function SellerDashboardPage() {
   const queryClient = useQueryClient();
-  const user = useAuthStore((state) => state.user);
 
   const { data: listings = [] } = useQuery({
     queryKey: ['seller-listings'],

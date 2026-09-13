@@ -17,7 +17,7 @@ export const reviewsApi = {
     return response.data?.data ?? [];
   },
 
-  getByOrder: async (orderId: string) => {
+  getByOrder: async (_orderId: string) => {
     return null;
   },
 
