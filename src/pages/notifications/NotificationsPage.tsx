@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 import { notificationsApi, type NotificationRecord } from '../../services/notificationsApi';
+import { useAuthStore } from '../../services/authStore';
 
 const typeIcons: Record<NotificationRecord['type'], string> = {
   ORDER_PLACED: '📦',
@@ -30,6 +31,7 @@ const formatTimeAgo = (timestamp: string) => {
 const PAGE_SIZE = 5;
 
 export default function NotificationsPage() {
+  const user = useAuthStore((state) => state.user);
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
   const [page, setPage] = useState(1);
@@ -62,7 +64,7 @@ export default function NotificationsPage() {
   };
 
   return (
-    <div className="page-shell">
+    <div className={`page-shell${user?.role === 'SUPPLIER' ? ' supplier-notifications-page' : ''}`}>
       <div className="summary-row">
         <div>
           <h1>Notifications</h1>

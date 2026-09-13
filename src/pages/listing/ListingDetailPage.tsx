@@ -68,10 +68,14 @@ export default function ListingDetailPage() {
   };
 
   return (
-    <div className="page-shell">
+    <div className="page-shell listing-detail-page">
+      <Link to="/search" className="listing-back-link">← Back to listings</Link>
       <div className="listing-layout">
         <section className="gallery-column">
-          <img src={safeSelectedImage} alt={listing.title} className="listing-main-image" />
+          <div className="listing-gallery">
+            <img src={safeSelectedImage} alt={listing.title} className="listing-main-image" />
+            <span className="listing-photo-count">{galleryImages.length} photo{galleryImages.length === 1 ? '' : 's'}</span>
+          </div>
           <div className="thumbnail-row">
             {galleryImages.map((image) => (
               <button key={image} type="button" className="thumbnail-button" onClick={() => setSelectedImage(image)}>
@@ -81,26 +85,18 @@ export default function ListingDetailPage() {
           </div>
         </section>
 
-        <section className="details-column">
+        <section className="listing-purchase-card">
           <span className="badge">{listing.category}</span>
           <h1 className="detail-title">{listing.title}</h1>
-          <div className="price-line">Rs.{Number(listing.price).toFixed(2)} / unit</div>
+          <div className="listing-price">Rs.{Number(listing.price).toFixed(2)} <span>/ {listing.unit}</span></div>
           <p className={`availability ${listing.quantity < 5 ? 'warning' : ''}`}>
-            {listing.quantity} units available {listing.quantity < 5 ? '(Low stock)' : ''}
+            {listing.quantity} {listing.unit} available {listing.quantity < 5 ? '(Low stock)' : ''}
           </p>
-
-          
-
-          <div className="supplier-card">
-            <div>
-              <strong>{listing.supplierName}</strong>
-              <div className="supplier-meta">
-                <StarRating value={averageRating} />
-                <span>{averageRating.toFixed(1)} ({reviews.length} reviews)</span>
-              </div>
-            </div>
+          <div className="listing-facts">
+            <div><span>Supplier</span><strong>{listing.supplierName}</strong></div>
+            <div><span>Category</span><strong>{listing.category}</strong></div>
+            <div><span>Rating</span><strong>{averageRating.toFixed(1)} / 5</strong></div>
           </div>
-
           <div className="quantity-row">
             <button
               type="button"
@@ -142,6 +138,28 @@ export default function ListingDetailPage() {
           )}
         </section>
       </div>
+
+      <section className="listing-information">
+        <div className="listing-summary">
+          <div><span>Price</span><strong>Rs.{Number(listing.price).toFixed(2)}</strong></div>
+          <div><span>Unit</span><strong>{listing.unit}</strong></div>
+          <div><span>Available</span><strong>{listing.quantity} {listing.unit}</strong></div>
+          <div><span>Reviews</span><strong>{reviews.length}</strong></div>
+        </div>
+        <div className="listing-attributes">
+          <h2>Attributes</h2>
+          <div className="attribute-grid">
+            <span>✦ {listing.category}</span>
+            <span>▣ {listing.quantity} {listing.unit} in stock</span>
+            <span>♧ Local supplier</span>
+            <span>★ {averageRating.toFixed(1)} rating</span>
+          </div>
+        </div>
+        <div className="listing-description">
+          <h2>Description</h2>
+          <p>{listing.description || 'Fresh local produce prepared with care by a trusted GardenLink supplier.'}</p>
+        </div>
+      </section>
 
       <section className="reviews-section">
         <div className="reviews-summary">

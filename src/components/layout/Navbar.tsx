@@ -12,6 +12,18 @@ export default function Navbar() {
   const cartCount = useCartStore((state) =>
     state.items.reduce((count, item) => count + item.quantity, 0)
   );
+  const isDashboard =
+    location.pathname === '/dashboard' ||
+    (user?.role === 'SUPPLIER' &&
+      ['/notifications', '/orders', '/listing/create'].includes(location.pathname)) ||
+    (user?.role === 'SUPPLIER' && location.pathname.startsWith('/listing/edit/'));
+  const isSupplier = user?.role === 'SUPPLIER';
+  const isBuyer = Boolean(token) && user?.role !== 'SUPPLIER';
+  const isShopPage = location.pathname === '/shop' || location.pathname === '/search';
+  const isPublicHeaderPage =
+    !token && ['/', '/login', '/register', '/shop', '/search'].includes(location.pathname);
+  const isHomePage = location.pathname === '/';
+  const sectionHref = (section: string) => (isHomePage ? `#${section}` : `/#${section}`);
 
   const handleLogout = () => {
     logout();
@@ -20,7 +32,7 @@ export default function Navbar() {
 
   return (
     <nav
-      className={location.pathname === '/' ? 'site-navbar home-navbar' : 'site-navbar'}
+      className={`site-navbar${isPublicHeaderPage ? ' home-navbar' : ''}${isDashboard ? ' dashboard-navbar' : ''}${isSupplier ? ' supplier-navbar' : ''}${isBuyer ? ' buyer-navbar' : ''}`}
       style={{
         position: 'sticky',
         top: 0,
@@ -32,8 +44,10 @@ export default function Navbar() {
       }}
     >
       <div
+        className="site-navbar-inner"
         style={{
           maxWidth: '1200px',
+          width: '100%',
           margin: '0 auto',
           padding: '0 1.5rem',
           height: '70px',
@@ -43,15 +57,36 @@ export default function Navbar() {
         }}
       >
         {/* Brand Logo */}
-        <Link
-          to="/"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.625rem',
-            textDecoration: 'none',
-          }}
-        >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+          {isDashboard ? (
+            <Link
+              to="/"
+              aria-label="Home"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '40px',
+                height: '40px',
+                borderRadius: '10px',
+                backgroundColor: '#f0fdf4',
+                color: '#166534',
+                textDecoration: 'none',
+                fontSize: '1.25rem',
+              }}
+            >
+              ⌂
+            </Link>
+          ) : null}
+          <Link
+            to="/"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.625rem',
+              textDecoration: 'none',
+            }}
+          >
           <div
             style={{
               width: '40px',
@@ -77,18 +112,37 @@ export default function Navbar() {
           >
             GardenLink
           </span>
-        </Link>
+          </Link>
+        </div>
 
         {/* Navigation Links */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-          <Link
-            to="/"
-            style={{ color: '#334155', textDecoration: 'none', fontWeight: 600, fontSize: '0.938rem' }}
-          >
-            Home
-          </Link>
+        <div className="site-navbar-links" style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+          {isPublicHeaderPage ? (
+            <>
+              <a href={sectionHref('home')}>Home</a>
+              <a href={sectionHref('about')}>About Us</a>
+              <a href={sectionHref('services')}>Services</a>
+              <a href={sectionHref('sell')}>Sell</a>
+              <a href={sectionHref('contact')}>Contact</a>
+            </>
+          ) : isBuyer ? (
+            <>
+              <a href={sectionHref('home')}>Home</a>
+              <a href={sectionHref('about')}>About Us</a>
+              <a href={sectionHref('services')}>Services</a>
+              <a href={sectionHref('sell')}>Sell</a>
+              <a href={sectionHref('contact')}>Contact</a>
+            </>
+          ) : !isDashboard && (
+            <Link
+              to="/"
+              style={{ color: '#334155', textDecoration: 'none', fontWeight: 600, fontSize: '0.938rem' }}
+            >
+              Home
+            </Link>
+          )}
 
-          {user?.role !== 'SUPPLIER' && (
+          {!isPublicHeaderPage && !isBuyer && user?.role !== 'SUPPLIER' && (
             <Link
               to="/search"
               style={{ color: '#334155', textDecoration: 'none', fontWeight: 600, fontSize: '0.938rem' }}
@@ -97,20 +151,45 @@ export default function Navbar() {
             </Link>
           )}
 
-          <a href="#about" style={{ color: '#64748b', textDecoration: 'none', fontWeight: 500, fontSize: '0.938rem' }}>
-            About Us
-          </a>
-          <a href="#services" style={{ color: '#64748b', textDecoration: 'none', fontWeight: 500, fontSize: '0.938rem' }}>
-            Services
-          </a>
-          <a href="#contact" style={{ color: '#64748b', textDecoration: 'none', fontWeight: 500, fontSize: '0.938rem' }}>
-            Contact
-          </a>
+          {!isPublicHeaderPage && !isDashboard && !isBuyer && (
+            <>
+              <a href="#about" style={{ color: '#64748b', textDecoration: 'none', fontWeight: 500, fontSize: '0.938rem' }}>
+                About Us
+              </a>
+              <a href="#services" style={{ color: '#64748b', textDecoration: 'none', fontWeight: 500, fontSize: '0.938rem' }}>
+                Services
+              </a>
+              <a href="#contact" style={{ color: '#64748b', textDecoration: 'none', fontWeight: 500, fontSize: '0.938rem' }}>
+                Contact
+              </a>
+            </>
+          )}
+
         </div>
 
         {/* Actions & Profile */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          {token ? (
+        <div className="site-navbar-actions" style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          {isPublicHeaderPage ? (
+            <Link
+              to={isShopPage ? '/login' : '/search'}
+              className="home-store-button"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.45rem',
+                padding: '0.6rem 1.15rem',
+                borderRadius: '999px',
+                backgroundColor: '#759f45',
+                color: '#fff',
+                textDecoration: 'none',
+                fontWeight: 700,
+                fontSize: '0.875rem',
+              }}
+            >
+              <span aria-hidden="true">{isShopPage ? '↪' : '▣'}</span>
+              {isShopPage ? 'Sign In' : 'Online store'}
+            </Link>
+          ) : token ? (
             <>
               {user?.role === 'SUPPLIER' && (
                 <Link
@@ -203,7 +282,7 @@ export default function Navbar() {
           )}
 
           {/* Cart — only for non-suppliers */}
-          {user?.role !== 'SUPPLIER' && (
+          {!isPublicHeaderPage && user?.role !== 'SUPPLIER' && (
             <Link
               to="/cart"
               style={{

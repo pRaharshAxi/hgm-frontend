@@ -139,7 +139,7 @@ export default function CreateListingPage() {
   };
 
   return (
-    <div style={{ maxWidth: '640px', margin: '2rem auto', padding: '0 1.5rem', fontFamily: 'system-ui, sans-serif' }}>
+    <div className="supplier-create-listing-page" style={{ maxWidth: '640px', margin: '2rem auto', padding: '0 1.5rem', fontFamily: 'system-ui, sans-serif' }}>
       <h1 style={{ color: '#14532d', fontWeight: 800, marginBottom: '1.5rem' }}>Add New Listing</h1>
 
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>

@@ -985,6 +985,14 @@ code {
   min-height: 2.5em;
 }
 
+.product-quantity {
+  display: block;
+  margin: 0.4rem 0 0.75rem;
+  color: #718176;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
 .product-image {
   height: 200px;
   background: #f1f5f9;
@@ -998,4 +1006,13 @@ code {
 .product-footer strong {
   font-size: 1.1rem;
   color: #15803d;
+}
+
+.empty-listings {
+  grid-column: 1 / -1;
+  padding: 2rem;
+  border: 1px dashed #bed7a8;
+  border-radius: 1rem;
+  color: #5f7464;
+  text-align: center;
 }

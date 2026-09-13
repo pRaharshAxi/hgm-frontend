@@ -247,7 +247,7 @@ void LegacyHome;
 function Home() {
   return (
     <main className="home-page">
-      <section className="hero-section">
+      <section className="hero-section" id="home">
         <div className="hero-produce hero-produce-left" aria-hidden="true">🌿</div>
         <div className="hero-produce hero-produce-right" aria-hidden="true">🌿</div>
         <div className="hero-copy">
@@ -268,7 +268,7 @@ function Home() {
           </div>
         </div>
       </section>
-      <section className="about-section">
+      <section className="about-section" id="about">
         <div className="about-copy">
           <span className="about-eyebrow">🌿 About Us Company</span>
           <h2>
@@ -292,7 +292,7 @@ function Home() {
           <a className="about-button" href="/search">Discover More <span aria-hidden="true">»</span></a>
         </div>
       </section>
-      <section className="story-section">
+      <section className="story-section" id="services">
         <div className="story-image" aria-hidden="true" />
         <div className="story-copy">
           <span className="story-eyebrow">• Local flavor meets digital ease</span>
@@ -315,7 +315,20 @@ function Home() {
           </div>
         </div>
       </section>
-      <footer className="home-footer">
+      <section className="seller-section" id="sell">
+        <div className="seller-copy">
+          <span className="seller-eyebrow">• Grow with GardenLink</span>
+          <h2>Want to Become a Seller?</h2>
+          <p>
+            Sell your fresh <strong>vegetables, fruits, leafy greens, spices, and more</strong> on
+            GardenLink. Reach more customers and grow your business.
+          </p>
+          <a className="seller-button" href="/register">
+            Become a Seller <span aria-hidden="true">→</span>
+          </a>
+        </div>
+      </section>
+      <footer className="home-footer" id="contact">
         <div className="footer-contact">
           <span className="footer-eyebrow">• Have questions?</span>
           <h2>
