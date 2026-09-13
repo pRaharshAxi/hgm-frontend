@@ -244,77 +244,112 @@ function LegacyHome() {
 
 void LegacyHome;
 
+
+
 function Home() {
   return (
     <main className="home-page">
       <section className="hero-section" id="home">
         <div className="hero-produce hero-produce-left" aria-hidden="true">🌿</div>
         <div className="hero-produce hero-produce-right" aria-hidden="true">🌿</div>
+
         <div className="hero-copy">
           <span className="hero-eyebrow">• Garden fresh, delivered digitally</span>
+
           <h1>
             Fresh selections,
             <br />
             <span>ready when you are.</span>
           </h1>
+
           <p>
-            Order online. Pick up fresh local products—plátano, yuca, sazón
+            Discover fresh fruits, vegetables, herbs and other home-grown produce
             <br className="hero-break" />
-            —without the hassle.
+            directly from local home gardens.
           </p>
+
           <div className="hero-actions">
-            <a className="hero-button" href="/search">Shop Now <span aria-hidden="true">→</span></a>
-            <a className="hero-link" href="/search?nearby=true">How it works <span aria-hidden="true">→</span></a>
+            <a className="hero-button" href="/search">
+              Shop Now <span aria-hidden="true">→</span>
+            </a>
+
+            <a className="hero-link" href="/search?nearby=true">
+              Discover Nearby <span aria-hidden="true">→</span>
+            </a>
           </div>
         </div>
       </section>
       <section className="about-section" id="about">
         <div className="about-copy">
-          <span className="about-eyebrow">🌿 About Us Company</span>
+          <span className="about-eyebrow">🌿 About GardenLink</span>
+
           <h2>
-            Organic Integrity Durable
+            Fresh Produce From
             <br />
-            Impact Frutin’s Story
+            Gardens Near You
           </h2>
+
           <p>
-            Some studies suggest that organic foods may have higher levels of
-            certain nutrients and antioxidants compared to conventionally
-            grown foods. However, this can vary depending on factors like soil
-            quality and growing conditions.
+            GardenLink connects home garden owners with people looking for fresh,
+            locally grown produce. Discover fruits, vegetables and herbs grown
+            within your community and buy directly from local suppliers.
           </p>
+
           <ul className="about-benefits">
-            <li>100% Organic Products</li>
-            <li>No Synthetic Chemicals</li>
-            <li>Always Fresh &amp; Natural Foods</li>
-            <li>Best Prices</li>
-            <li>Environmental Benefits</li>
+            <li>Locally Grown Produce</li>
+            <li>Direct From Home Gardens</li>
+            <li>Fresh &amp; Natural Products</li>
+            <li>Support Local Growers</li>
+            <li>Simple Online Shopping</li>
           </ul>
-          <a className="about-button" href="/search">Discover More <span aria-hidden="true">»</span></a>
+
+          <a className="about-button" href="/search">
+            Discover More <span aria-hidden="true">»</span>
+          </a>
         </div>
       </section>
       <section className="story-section" id="services">
         <div className="story-image" aria-hidden="true" />
+
         <div className="story-copy">
-          <span className="story-eyebrow">• Local flavor meets digital ease</span>
+          <span className="story-eyebrow">• Local gardens meet digital convenience</span>
+
           <h2>
             Why choose <span>GardenLink?</span>
           </h2>
+
           <p>
-            We bring you the best of local markets—without the hustle. From
-            fresh ingredients to a smooth online experience, GardenLink gives
-            you time back and flavor forward.
+            GardenLink makes it easy to discover fresh produce from home gardens
+            around you. Browse local listings, connect with nearby growers and
+            shop for fresh products through one simple marketplace.
           </p>
+
           <ul className="story-list">
-            <li><strong>Smart Selection:</strong> Choose online, skip the guesswork</li>
-            <li><strong>Less Waiting:</strong> Your order is prepped and ready</li>
-            <li><strong>Authentic Goods:</strong> Only the best, local and fresh</li>
+            <li>
+              <strong>Fresh Choices:</strong> Discover produce from local home gardens
+            </li>
+
+            <li>
+              <strong>Easy Shopping:</strong> Browse and order through one simple platform
+            </li>
+
+            <li>
+              <strong>Support Local:</strong> Buy directly from home garden growers
+            </li>
           </ul>
+
           <div className="story-actions">
-            <a className="hero-button" href="/search">Start Now <span aria-hidden="true">→</span></a>
-            <a className="story-secondary-button" href="/search">Learn More <span aria-hidden="true">ⓘ</span></a>
+            <a className="hero-button" href="/search">
+              Start Exploring <span aria-hidden="true">→</span>
+            </a>
+
+            <a className="story-secondary-button" href="/search">
+              Discover More <span aria-hidden="true">ⓘ</span>
+            </a>
           </div>
         </div>
       </section>
+
       <section className="seller-section" id="sell">
         <div className="seller-copy">
           <span className="seller-eyebrow">• Grow with GardenLink</span>
@@ -386,6 +421,7 @@ function Home() {
         </div>
       </footer>
     </main>
+
   );
 }
 

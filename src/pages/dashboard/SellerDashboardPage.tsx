@@ -9,6 +9,7 @@ import { useAuthStore } from '../../services/authStore';
 export default function SellerDashboardPage() {
   const queryClient = useQueryClient();
   const user = useAuthStore((state) => state.user);
+  
 
   const { data: listings = [] } = useQuery({
     queryKey: ['seller-listings'],
