@@ -4,9 +4,11 @@ import { BarChart, Bar, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxi
 import { listingsApi, type Listing } from '../../services/listingsApi';
 import { ordersApi, type OrderRecord } from '../../services/ordersApi';
 import toast from 'react-hot-toast';
+import { useAuthStore } from '../../services/authStore';
 
 export default function SellerDashboardPage() {
   const queryClient = useQueryClient();
+  const user = useAuthStore((state) => state.user);
 
   const { data: listings = [] } = useQuery({
     queryKey: ['seller-listings'],
@@ -25,6 +27,8 @@ export default function SellerDashboardPage() {
   const totalRevenue = supplierOrders
     .filter((order: OrderRecord) => order.status === 'COMPLETED')
     .reduce((sum: number, order: OrderRecord) => sum + Number(order.totalAmount), 0);
+  const completedOrders = supplierOrders.filter((order) => order.status === 'COMPLETED').length;
+  const activeListings = listings.filter((listing) => listing.isActive !== false).length;
 
   // Build revenue by month from real orders
   const revenueByMonth = supplierOrders
@@ -52,130 +56,161 @@ export default function SellerDashboardPage() {
   };
 
   return (
-    <div className="page-shell">
-      <div className="summary-row">
-        <h1>Seller Dashboard</h1>
-        <Link className="btn btn-primary" to="/listing/create">
-          Add New Listing
-        </Link>
-      </div>
+    <main className="seller-dashboard">
+      <div className="seller-dashboard-content" id="overview">
+        <div className="seller-dashboard-heading">
+          <div>
+            <p className="seller-kicker">Seller workspace</p>
+            <h1>Good to see you, {user?.name ?? 'Seller'}</h1>
+            <p>Track your products, orders, and revenue in one place.</p>
+          </div>
+          <Link className="seller-primary-button" to="/listing/create">
+            <span>+</span> Add new listing
+          </Link>
+        </div>
 
-      <div className="stats-grid">
-        <div className="stat-card">
-          <strong>{listings.length}</strong>
-          <span>Total Listings</span>
+        <div className="seller-stats-grid">
+          <article className="seller-stat-card seller-stat-highlight">
+            <div className="seller-stat-card-top"><span>Total revenue</span><span className="seller-stat-icon">↗</span></div>
+            <strong>Rs.{totalRevenue.toFixed(2)}</strong>
+            <small>{completedOrders} completed orders</small>
+          </article>
+          <article className="seller-stat-card">
+            <div className="seller-stat-card-top"><span>Total orders</span><span className="seller-stat-icon">▣</span></div>
+            <strong>{supplierOrders.length}</strong>
+            <small>{pendingOrders} orders need attention</small>
+          </article>
+          <article className="seller-stat-card">
+            <div className="seller-stat-card-top"><span>Active listings</span><span className="seller-stat-icon">◈</span></div>
+            <strong>{activeListings}</strong>
+            <small>{listings.length - activeListings} inactive listings</small>
+          </article>
+          <article className="seller-stat-card">
+            <div className="seller-stat-card-top"><span>Products listed</span><span className="seller-stat-icon">⌘</span></div>
+            <strong>{listings.length}</strong>
+            <small>Across your catalog</small>
+          </article>
         </div>
-        <div className="stat-card">
-          <strong>{pendingOrders}</strong>
-          <span>Pending Orders</span>
-        </div>
-        <div className="stat-card">
-          <strong>Rs.{totalRevenue.toFixed(2)}</strong>
-          <span>Total Revenue</span>
-        </div>
-        <div className="stat-card">
-          <strong>{supplierOrders.length}</strong>
-          <span>Total Orders</span>
-        </div>
-      </div>
 
-      <section className="dashboard-section">
-        <h2>My Listings</h2>
+        <div className="seller-dashboard-grid">
+          <section className="seller-panel seller-revenue-panel" id="analytics">
+            <div className="seller-panel-heading">
+              <div><p className="seller-panel-label">Performance</p><h2>Revenue overview</h2></div>
+              <span className="seller-panel-filter">All time ▾</span>
+            </div>
+            {revenueData.length > 0 ? (
+              <div className="seller-chart-box">
+                <ResponsiveContainer width="100%" height={250}>
+                  <BarChart data={revenueData}>
+                    <CartesianGrid stroke="#303b35" strokeDasharray="4 4" vertical={false} />
+                    <XAxis dataKey="month" stroke="#8d9b92" axisLine={false} tickLine={false} />
+                    <YAxis stroke="#8d9b92" axisLine={false} tickLine={false} width={55} />
+                    <Tooltip contentStyle={{ background: '#202722', border: '1px solid #3b4a40', borderRadius: '10px', color: '#f2f7f2' }} />
+                    <Bar dataKey="revenue" fill="#8bd27b" radius={[6, 6, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            ) : (
+              <div className="seller-empty-chart">Complete orders will appear here as revenue data.</div>
+            )}
+          </section>
+
+          <section className="seller-panel seller-orders-panel" id="orders">
+            <div className="seller-panel-heading">
+              <div><p className="seller-panel-label">Latest activity</p><h2>Incoming orders</h2></div>
+              <Link to="/orders" className="seller-panel-link">View all</Link>
+            </div>
+            {supplierOrders.length === 0 ? (
+              <p className="seller-empty-state">No orders yet.</p>
+            ) : (
+              <div className="seller-activity-list">
+                {supplierOrders.slice(0, 5).map((order: OrderRecord) => (
+                  <Link className="seller-activity-row" key={order.id} to={`/orders/${order.id}`}>
+                    <span className="seller-activity-avatar">
+                      {(order.buyer?.name ?? 'Customer').slice(0, 1).toUpperCase()}
+                    </span>
+                    <span className="seller-activity-main">
+                      <strong>{order.buyer?.name ?? 'Customer'}</strong>
+                      <small>#{order.id.slice(0, 8)} · {new Date(order.createdAt).toLocaleDateString()}</small>
+                    </span>
+                    <span className="seller-activity-amount">Rs.{Number(order.totalAmount).toFixed(2)}</span>
+                    <span className={`seller-order-status seller-order-${order.status.toLowerCase()}`}>{order.status}</span>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </section>
+        </div>
+
+        <section className="seller-panel seller-listings-panel" id="products">
+          <div className="seller-panel-heading">
+            <div><p className="seller-panel-label">Catalog management</p><h2>My listings</h2></div>
+            <Link to="/listing/create" className="seller-panel-link">+ Add product</Link>
+          </div>
         {listings.length === 0 ? (
-          <p style={{ color: '#64748b', padding: '1rem 0' }}>
+          <p className="seller-empty-state">
             No listings yet. <Link to="/listing/create">Create your first listing</Link>
           </p>
         ) : (
-          <table className="order-table">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {listings.map((listing: Listing) => (
-                <tr key={listing.id}>
-                  <td>{listing.title}</td>
-                  <td>{listing.category}</td>
-                  <td>Rs.{Number(listing.price).toFixed(2)}</td>
-                  <td>{listing.quantity}</td>
-                  <td>
-                    <span className={listing.isActive === false ? 'badge-red' : 'badge-green'}>
-                      {listing.isActive === false ? 'Inactive' : 'Active'}
-                    </span>
-                  </td>
-                  <td>
-                    <Link className="btn btn-secondary" to={`/listing/edit/${listing.id}`}>
-                      Edit
+          <div className="seller-listing-cards">
+            {listings.map((listing: Listing) => (
+              <article className="seller-listing-card" key={listing.id}>
+                <div className="seller-listing-image-wrap">
+                  {listing.images?.[0] ? (
+                    <>
+                      <img
+                        className="seller-listing-image"
+                        src={listing.images[0]}
+                        alt={listing.title}
+                        onError={(event) => {
+                          event.currentTarget.hidden = true;
+                          event.currentTarget.nextElementSibling?.removeAttribute('hidden');
+                        }}
+                      />
+                      <div className="seller-listing-image-placeholder" hidden aria-hidden="true">
+                        <span>Image unavailable</span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="seller-listing-image-placeholder" aria-hidden="true">
+                      <span>No photo</span>
+                    </div>
+                  )}
+                  <span className={listing.isActive === false ? 'seller-listing-status inactive' : 'seller-listing-status'}>
+                    {listing.isActive === false ? 'Inactive' : 'Active'}
+                  </span>
+                </div>
+                <div className="seller-listing-card-body">
+                  <div className="seller-listing-title-row">
+                    <div>
+                      <h3>{listing.title}</h3>
+                      <span>{listing.category}</span>
+                    </div>
+                    <strong>Rs.{Number(listing.price).toFixed(2)}</strong>
+                  </div>
+                  <div className="seller-listing-meta">
+                    <span><small>Available</small>{listing.quantity} {listing.unit}</span>
+                    <span><small>Listing status</small>{listing.isActive === false ? 'Paused' : 'Live'}</span>
+                  </div>
+                  <div className="seller-listing-actions">
+                    <Link className="seller-table-action" to={`/listing/edit/${listing.id}`}>
+                      Edit listing
                     </Link>
                     <button
                       type="button"
-                      className="btn btn-secondary"
+                      className="seller-table-action seller-delete-action"
                       onClick={() => handleDelete(listing.id, listing.title)}
-                      style={{ marginLeft: '0.5rem', color: '#dc2626' }}
                     >
                       Delete
                     </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </section>
-
-      {revenueData.length > 0 && (
-        <section className="dashboard-section">
-          <h2>Revenue by Month</h2>
-          <div className="chart-box">
-            <ResponsiveContainer width="100%" height={220}>
-              <BarChart data={revenueData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="revenue" fill="#16a34a" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </section>
-      )}
-
-      <section className="dashboard-section">
-        <div className="summary-row">
-          <h2>Incoming Orders</h2>
-          <Link to="/orders">View All</Link>
-        </div>
-        {supplierOrders.length === 0 ? (
-          <p style={{ color: '#64748b', padding: '1rem 0' }}>No orders yet.</p>
-        ) : (
-          <div className="order-list-grid">
-            {supplierOrders.slice(0, 5).map((order: OrderRecord) => (
-              <article key={order.id} className="order-card">
-                <div className="summary-row">
-                  <span>#{order.id.slice(0, 8)}</span>
-                  <span className={`badge-${
-                    order.status === 'COMPLETED' ? 'green' :
-                    order.status === 'CANCELLED' ? 'red' : 'yellow'
-                  }`}>{order.status}</span>
+                  </div>
                 </div>
-                <div className="muted-text">
-                  {new Date(order.createdAt).toLocaleDateString()}
-                </div>
-                <strong>Rs.{Number(order.totalAmount).toFixed(2)}</strong>
-                <Link className="btn btn-secondary" to={`/orders/${order.id}`}>
-                  View Details
-                </Link>
               </article>
             ))}
           </div>
         )}
-      </section>
-    </div>
+        </section>
+      </div>
+    </main>
   );
 }
